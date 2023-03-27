@@ -7,6 +7,18 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <TabControl>
+            <TabItem Header="Pestaña 1">
+                <Grid>
+                    <TextBlock Text="Contenido de la pestaña 1" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Pestaña 2">
+                <Grid>
+                    <TextBlock Text="Contenido de la pestaña 2" />
+                </Grid>
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>
