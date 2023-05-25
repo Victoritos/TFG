@@ -105,7 +105,6 @@ namespace TFG.Clases
                 "\r\n   RoundId INTEGER PRIMARY KEY," +
                 "\r\n   RoundName TEXT NOT NULL," +
                 "\r\n   TournamentId INTEGER NOT NULL," +
-                "\r\n   ParentRoundId INTEGER," +
                 "\r\n   FOREIGN KEY (TournamentId) REFERENCES Tournaments(TournamentId)" +
                 //"\r\n   FOREIGN KEY (ParentRoundId) REFERENCES Rounds(RoundId)\r\n" +
                 ");";
@@ -168,6 +167,40 @@ namespace TFG.Clases
                 }
             }
         }
+
+        public void CreateTableParticipacion() { 
+
+            string tableExistsQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name='ParticipantTournament '";
+
+            // Consulta para crear la tabla
+            string createTableQuery = "CREATE TABLE ParticipantTournament  (" +
+                "\r\n   ParticipantId INTEGER," +
+                "\r\n   TournamentId INTEGER," +
+                "\r\n   PRIMARY KEY (ParticipantId, TournamentId)," +
+                "\r\n   FOREIGN KEY (ParticipantId) REFERENCES Participants(ParticipantId)," +
+                "\r\n   FOREIGN KEY (TournamentId) REFERENCES Tournaments(TournamentId)" +
+                "\r\n);";
+
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(tableExistsQuery, connection))
+                {
+                    bool tableExists = command.ExecuteScalar() != null;
+
+                    // Si la tabla no existe, crearla
+                    if (!tableExists)
+                    {
+                        // Crear el comando para ejecutar la consulta
+                        using (SQLiteCommand createTableCommand = new SQLiteCommand(createTableQuery, connection))
+                        {
+                            // Ejecutar la consulta
+                            createTableCommand.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+        }
         public void Dropdata()
         {
             string query = "-- Eliminar la tabla Matches" +
@@ -178,6 +211,9 @@ namespace TFG.Clases
                 "\r\n" +
                 "\r\n-- Eliminar la tabla Rounds" +
                 "\r\nDROP TABLE IF EXISTS Rounds;" +
+                "\r\n" +
+                "\r\n-- Eliminar la tabla ParticipantTournament " +
+                "\r\nDROP TABLE IF EXISTS ParticipantTournament ;" +
                 "\r\n" +
                 "\r\n-- Eliminar la tabla Tournaments" +
                 "\r\nDROP TABLE IF EXISTS Tournaments;" +
@@ -198,7 +234,7 @@ namespace TFG.Clases
                 "\r\n" +
                 "\r\n-- Insertar datos en la tabla Rounds" +
                 "\r\nINSERT INTO Rounds (TournamentId, RoundName)" +
-                "\r\nVALUES (1, 'Primera ronda'), (1, 'Octavos de final'), (1, 'Cuartos de final'), (1, 'Semifinales'), (1, 'Final');" +
+                "\r\nVALUES (1, 'Primera ronda'), (1, 'Segunda ronda'),(1, 'Final');" +
                 "\r\n" +
                 "\r\n-- Insertar datos en la tabla Teams" +
                 "\r\nINSERT INTO Teams (Name, Email)" +
@@ -209,34 +245,35 @@ namespace TFG.Clases
                 "\r\n('Equipo D', 'equipod@example.com')," +
                 "\r\n('Equipo E', 'equipoe@example.com'), " +
                 "\r\n('Equipo F', 'equipof@example.com')," +
-                "\r\n('Equipo G', 'equipog@example.com'); " +
+                "\r\n('Equipo G', 'equipog@example.com'), " +
+                "\r\n('Equipo H', 'equipoh@example.com'); " +
                 "\r\n" +
                 "\r\n-- Insertar datos en la tabla Matches" +
                 "\r\nINSERT INTO RoundMatches (RoundId, HomeTeamId, AwayTeamId, HomeTeamScor, AwayTeamScore)" +
                 "\r\nVALUES" +
                 "\r\n-- Primera ronda" +
-                "\r\n(1, 1, 2, null, null)," +
-                "\r\n(1, 3, 4, null, null)," +
+                "\r\n(1, 1, 2, 3, 2)," +
+                "\r\n(1, 3, 4, 3, 0)," +
+                "\r\n(1, 5, 6, 3, 1)," +
+                "\r\n(1, 7, 8, 3, 0)," +
                 "\r\n" +
-                "\r\n-- Octavos de final" +
-                "\r\n(2, 1, 8, null, null)," +
-                "\r\n(2, 2, 7, null, null)," +
-                "\r\n(2, 3, 6, null, null)," +
-                "\r\n(2, 4, 5, null, null)," +
-                "\r\n" +
-                "\r\n-- Cuartos de final" +
-                "\r\n(3, 1, 4, null, null)," +
-                "\r\n(3, 2, 3, null, null)," +
-                "\r\n(3, 5, 8, null, null)," +
-                "\r\n(3, 6, 7, null, null)," +
-                "\r\n" +
-                "\r\n-- Semifinales" +
-                "\r\n(4, 1, 3, null, null)," +
-                "\r\n(4, 2, 6, null, null)," +
+                "\r\n-- Segunda Ronda" +
+                "\r\n(2, 1, 3, 3, 0)," +
+                "\r\n(2, 5, 8, 3, 1)," +
                 "\r\n" +
                 "\r\n-- Final" +
-                "\r\n(5, 1, 2, null, null);" +
-                "\r\n";
+                "\r\n(3, 1, 5, null, null);" +
+                "\r\nINSERT INTO ParticipantTournament (ParticipantId, TournamentId)" +
+                "\r\nVALUES" +
+                "\r\n(1, 1)," +
+                "\r\n(2, 1)," +
+                "\r\n(3, 1)," +
+                "\r\n(4, 1)," +
+                "\r\n(5, 1)," +
+                "\r\n(6, 1)," +
+                "\r\n(7, 1)," +
+                "\r\n(8, 1);" +
+                "\r\n ";
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
@@ -246,12 +283,11 @@ namespace TFG.Clases
         }
         public void SelectData()
         {
-            string query = "Select * from RoundMatches";
 
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string sql = "SELECT * FROM Teams";
+                string sql = "SELECT * FROM ParticipantTournament";
                 SQLiteCommand cmd = new SQLiteCommand(sql, connection);
 
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
@@ -259,10 +295,9 @@ namespace TFG.Clases
                     while (reader.Read())
                     {
                         int teamId = reader.GetInt32(0);
-                        string name = reader.GetString(1);
-                        string email = reader.GetString(2);
+                        int tournamentId = reader.GetInt32(1);
 
-                        Console.WriteLine("este es el id "+teamId+" "+name+" "+email);
+                        Console.WriteLine("este es el id "+teamId+" "+tournamentId+" ");
                     }
                 }
             }
@@ -270,12 +305,13 @@ namespace TFG.Clases
 
         public void RunAll()
         {
-            //Dropdata();
+            Dropdata();
             CreateDatabase();
             CreateTableTournaments();
             CreateTableTeams();
             CreateTableRounds();
             CreateTableRoundMatches();
+            CreateTableParticipacion();
             InsertData();
             SelectData();
         }

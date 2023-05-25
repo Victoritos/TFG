@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="Markdown" Version="2.2.1" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="7.0.4" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.117" />

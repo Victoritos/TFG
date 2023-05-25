@@ -1,4 +1,5 @@
-﻿using System.Data.SQLite;
+﻿using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,99 +7,20 @@ using TFG.Clases;
 
 namespace TFG
 {
+    
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private void iniciarBD()
-        {
-
-            string databaseFilePath = @"BBDD\MiBaseDeDatos.db";
-            string connectionString = $"Data Source={databaseFilePath};Version=3;";
-
-
-            // Consulta para verificar si la tabla existe
-            string tableExistsQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name='Rounds'";
-
-            // Consulta para crear la tabla
-            string createTableQuery = "CREATE TABLE Rounds (" +
-                "\r\n   RoundId INTEGER PRIMARY KEY," +
-                "\r\n   RoundName TEXT NOT NULL," +
-                "\r\n   TournamentId INTEGER NOT NULL," +
-                "\r\n   ParentRoundId INTEGER," +
-                "\r\n   FOREIGN KEY (TournamentId) REFERENCES Tournaments(TournamentId)," +
-                "\r\n   FOREIGN KEY (ParentRoundId) REFERENCES Rounds(RoundId)\r\n" +
-                ");";
-            string tableExistsQuery2 = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoundMatches'";
-
-            // Consulta para crear la tabla
-            string createTableQuery2 = "CREATE TABLE RoundMatches (" +
-                "\r\n   RoundMatchId INTEGER PRIMARY KEY," +
-                "\r\n   RoundId INTEGER NOT NULL," +
-                "\r\n   MatchOrder INTEGER NOT NULL," +
-                "\r\n   HomeTeamId INTEGER," +
-                "\r\n   AwayTeamId INTEGER," +
-                "\r\n   HomeScore INTEGER," +
-                "\r\n   AwayScore INTEGER," +
-                "\r\n   FOREIGN KEY (RoundId) REFERENCES Rounds(RoundId)," +
-                "\r\n   FOREIGN KEY (HomeTeamId) REFERENCES Teams(TeamId)," +
-                "\r\n   FOREIGN KEY (AwayTeamId) REFERENCES Teams(TeamId)" +
-                "\r\n);";
-            // Crear la conexión a la base de datos
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                // Abrir la conexión
-                connection.Open();
-
-                // Verificar si la tabla Rounds existe
-                using (SQLiteCommand command = new SQLiteCommand(tableExistsQuery, connection))
-                {
-                    bool tableExists = command.ExecuteScalar() != null;
-
-                    // Si la tabla no existe, crearla
-                    if (!tableExists)
-                    {
-                        // Crear el comando para ejecutar la consulta
-                        using (SQLiteCommand createTableCommand = new SQLiteCommand(createTableQuery, connection))
-                        {
-                            // Ejecutar la consulta
-                            createTableCommand.ExecuteNonQuery();
-                        }
-                    }
-                }
-
-                // Verificar si la tabla RoundMatches existe
-                using (SQLiteCommand command = new SQLiteCommand(tableExistsQuery2, connection))
-                {
-                    bool tableExists = command.ExecuteScalar() != null;
-
-                    // Si la tabla no existe, crearla
-                    if (!tableExists)
-                    {
-                        // Crear el comando para ejecutar la consulta
-                        using (SQLiteCommand createTableCommand = new SQLiteCommand(createTableQuery2, connection))
-                        {
-                            // Ejecutar la consulta
-                            createTableCommand.ExecuteNonQuery();
-                        }
-                    }
-                }
-
-                // Cerrar la conexión
-                connection.Close();
-
-
-            }
-        }
 
 
         public MainWindow()
         {
             SqliteDbHelper bbdd= new SqliteDbHelper();
             bbdd.RunAll();
-            //iniciarBD();
-            //InitializeComponent();
+            InitializeComponent();
+
         }
 
         private void verParticipantesClick(object sender, RoutedEventArgs e)
@@ -108,6 +30,50 @@ namespace TFG
 
             // Seleccionar la pestaña deseada
             tabControl1.SelectedItem = pestana2;
+            Teams participantes = new();
+            teamsGrid.ItemsSource = participantes.getAllTeams();
         }
+
+        private void verTorneosClick(object sender, RoutedEventArgs e)
+        {
+            // Obtener la referencia a la pestaña deseada
+            TabItem pestana3 = tabControl1.Items.Cast<TabItem>().FirstOrDefault(item => item.Header.Equals("Torneos"));
+
+            // Obtener el participante seleccionado desde el DataContext del botón
+            var button = sender as Button;
+            var participant = button.DataContext as Teams;
+
+            // Aquí puedes implementar la lógica para mostrar los torneos del participante en una pestaña aparte
+            // Puedes utilizar el participante.Id para buscar los torneos correspondientes en la base de datos, por ejemplo.
+            // Abre una nueva ventana o muestra los torneos en una pestaña aparte como prefieras.
+
+            tabControl1.SelectedItem = pestana3;
+            Tournament torneo = new Tournament();
+            tournamentGrid.ItemsSource = torneo.getTeamTournaments(participant.getTournaments());
+
+        }
+
+        private void VerCuadrosClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var torneo = button.DataContext as Tournament;
+
+            // Obtén los datos necesarios para dibujar el cuadro de torneo, como los equipos, las rondas y los partidos
+            List<Teams> teams = torneo.getTournamentTeams(); // Obtener los equipos desde la base de datos u otra fuente de datos
+            List<Rounds> rounds = torneo.getRoundsTournaments(); // Obtener las rondas desde la base de datos u otra fuente de datos
+            List<RoundMatches> roundMatches = torneo.getRoundsMatchesTournaments(); // Obtener los partidos desde la base de datos u otra fuente de datos
+
+            // Crea una instancia de la ventana TournamentWindow
+            TournamentWindow tournamentWindow = new TournamentWindow(teams, rounds, roundMatches);
+
+            // Dibuja el cuadro de torneo en la ventana TournamentWindow
+            tournamentWindow.DrawTournamentBracket();
+
+            // Muestra la ventana TournamentWindow
+            tournamentWindow.Show();
+
+        }
+
+        
     }
 }
