@@ -7,6 +7,58 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <TabControl Name="tabControl1" Grid.ColumnSpan="2">
+            <TabItem Header="Inicio">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="92"/>
+                        <ColumnDefinition Width="46.853"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Contenido de la pestaña 1" Grid.ColumnSpan="3" Margin="0,0,50,0" />
+                    <Button Content="Ver Participantes" Name="VerParticipantes" Click="verParticipantesClick" Grid.ColumnSpan="3" Margin="0,0,50,0"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Participantes">
+                <DataGrid x:Name="teamsGrid" AutoGenerateColumns="False" IsReadOnly="true">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding TeamId}" />
+                        <DataGridTextColumn Header="Nombre" Binding="{Binding Name}" />
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Ver Torneos" Name="VerTorneos" Click="verTorneosClick"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Torneos">
+                <DataGrid x:Name="tournamentGrid" AutoGenerateColumns="False" IsReadOnly="true">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding TournamentId}" />
+                        <DataGridTextColumn Header="Nombre" Binding="{Binding Name}" />
+                        <DataGridTextColumn Header="Start" Binding="{Binding StartDate}" />
+                        <DataGridTextColumn Header="End" Binding="{Binding EndDate}" />
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Ver Cuadro" Name="VerCuadro" Click="VerCuadrosClick"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>
