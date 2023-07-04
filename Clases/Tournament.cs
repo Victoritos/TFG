@@ -5,7 +5,7 @@ using System.IO;
 
 namespace TFG.Clases
 {
-    internal class Tournament
+    public class Tournament
     {
         private string dbFolderPath = Path.Combine("C:\\Users\\viccl\\source\\repos\\TFG", "BBDD");
         //private string dbFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BBDD2");
@@ -15,21 +15,67 @@ namespace TFG.Clases
 
         public int TournamentId { get; set; }
         public string? Name { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public List<Round> Rounds { get; set; }
+        public List<Team> Participants { get; set; }
+        public int numRondas { get; set; }
 
-        public Tournament(int tournamentId, string? name, DateTime startDate, DateTime endDate)
+        public Tournament(int tournamentId, string? name, string startDate, string endDate)
         {
             TournamentId = tournamentId;
             Name = name;
             StartDate = startDate;
             EndDate = endDate;
+            Rounds = getRoundsTournaments();
+            Participants = getAllTeams();
+            numRondas= CalcularNumRondas();
         }
-
+        public Tournament( string? name, string startDate, string endDate,List<Team> participants)
+        {
+            Name = name;
+            StartDate = startDate;
+            EndDate = endDate;
+            Rounds = getRoundsTournaments();
+            Participants = participants;
+            numRondas = CalcularNumRondas();
+        }
         public Tournament()
         {
         }
 
+        private int CalcularNumRondas()
+        {
+            return (int)Math.Sqrt(Participants.Count);
+        }
+
+        public List<Tournament> getAllournaments()
+        {
+            List<Tournament> tournaments = new List<Tournament>();
+
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                string sql = "SELECT * FROM Tournaments";
+                SQLiteCommand cmd = new SQLiteCommand(sql, connection);
+
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int tournamentId = reader.GetInt32(0);
+                        string name = reader.GetString(1);
+                        string startDate = reader.GetString(2);
+                        string endDate = reader.GetString(3);
+
+                        Tournament torneo = new Tournament(tournamentId, name, startDate, endDate);
+                        tournaments.Add(torneo);
+                    }
+                }
+
+            }
+            return tournaments;
+        }
         public List<Tournament> getTeamTournaments(List<int> ids)
         {
             List<Tournament> tournaments = new List<Tournament>();
@@ -48,8 +94,8 @@ namespace TFG.Clases
                         {
                             int tournamentId = reader.GetInt32(0);
                             string name = reader.GetString(1);
-                            DateTime startDate = reader.GetDateTime(2);
-                            DateTime endDate = reader.GetDateTime(3);
+                            string startDate = reader.GetString(2);
+                            string endDate = reader.GetString(3);
 
                             Tournament torneo = new Tournament(tournamentId, name, startDate, endDate);
                             tournaments.Add(torneo);
@@ -60,9 +106,9 @@ namespace TFG.Clases
             return tournaments;
         }
 
-        public List<Rounds> getRoundsTournaments()
+        public List<Round> getRoundsTournaments()
         {
-            List<Rounds> rondas = new List<Rounds>();
+            List<Round> rondas = new List<Round>();
 
             using (var connection = new SQLiteConnection(connectionString))
             {
@@ -79,7 +125,7 @@ namespace TFG.Clases
                         string name = reader.GetString(1);
                         int tournamentId = reader.GetInt32(2);
 
-                        Rounds ronda = new Rounds(roundId, name, tournamentId);
+                        Round ronda = new Round(roundId, name, tournamentId);
                         rondas.Add(ronda);
                     }
                 }
@@ -88,14 +134,14 @@ namespace TFG.Clases
         }
         public List<RoundMatches> getRoundsMatchesTournaments()
         {
-            List<Rounds> rondas = getRoundsTournaments();
+            List<Round> rondas = getRoundsTournaments();
             List<RoundMatches> matches = new List<RoundMatches>();
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
                 for (int i = 0; i < rondas.Count; i++)
                 {
-                    Rounds ronda = rondas[i];
+                    Round ronda = rondas[i];
 
                     string sql = "SELECT * FROM RoundMatches where RoundId = " + ronda.RoundId;
                     SQLiteCommand cmd = new SQLiteCommand(sql, connection);
@@ -131,7 +177,33 @@ namespace TFG.Clases
             }
             return matches;
         }
-        public List<int> getParticipants()
+        public List<Team> getAllTeams()
+        {
+            List<Team> teams = new List<Team>();
+
+
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                string sql = "SELECT * FROM Teams where TeamId = " + TournamentId;
+                SQLiteCommand cmd = new SQLiteCommand(sql, connection);
+
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int teamId = reader.GetInt32(0);
+                        string name = reader.GetString(1);
+                        string email = reader.GetString(2);
+
+                        Team team = new Team(teamId, name, email);
+                        teams.Add(team);
+                    }
+                }
+            }
+            return teams;
+        }
+        public List<int> getParticipantsIds()
         {
             List<int> ids = new List<int>();
 
@@ -153,10 +225,10 @@ namespace TFG.Clases
             return ids;
 
         }
-        public List<Teams> getTournamentTeams()
+        public List<Team> getTournamentTeams()
         {
-            List<Teams> equipos = new List<Teams>();
-            List<int> ids = getParticipants();
+            List<Team> equipos = new List<Team>();
+            List<int> ids = getParticipantsIds();
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
@@ -173,7 +245,7 @@ namespace TFG.Clases
                             int TeamId = reader.GetInt32(0);
                             string name = reader.GetString(1);
                             string email = reader.GetString(2);
-                            Teams equipo = new Teams(TeamId, name, email);
+                            Team equipo = new Team(TeamId, name, email);
                             equipos.Add(equipo);
                         }
                     }

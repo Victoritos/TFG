@@ -5,60 +5,97 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TFG"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <TabControl Name="tabControl1" Grid.ColumnSpan="2">
-            <TabItem Header="Inicio">
+        Title="MainWindow" Height="450" Width="800"
+        WindowStyle="None"
+        FontFamily="Segoe UI">
+    <!-- Set the default font -->
+    <Border Background="#F0F0F0" CornerRadius="10">
+        <Grid>
+            <TabControl Name="tabControl1" Grid.ColumnSpan="2" BorderBrush="{x:Null}" Background="#FFF0F0F0">
+                <TabItem Header="Inicio">
+                    <TabItem.Background>
+                        <LinearGradientBrush EndPoint="0,1">
+                            <GradientStop Color="#FFF0F0F0"/>
+                            <GradientStop Color="#FFB9C2D6" Offset="1"/>
+                        </LinearGradientBrush>
+                    </TabItem.Background>
+                    <Grid Background="#FFF0F0F0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="2*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Bienvenido a la aplicación de Gestión de cuadros de Torneo" Margin="20" FontFamily="Segoe UI" FontSize="24" Foreground="#FF272537" Grid.ColumnSpan="2" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center" />
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="92"/>
-                        <ColumnDefinition Width="46.853"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Contenido de la pestaña 1" Grid.ColumnSpan="3" Margin="0,0,50,0" />
-                    <Button Content="Ver Participantes" Name="VerParticipantes" Click="verParticipantesClick" Grid.ColumnSpan="3" Margin="0,0,50,0"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Participantes">
-                <DataGrid x:Name="teamsGrid" AutoGenerateColumns="False" IsReadOnly="true">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding TeamId}" />
-                        <DataGridTextColumn Header="Nombre" Binding="{Binding Name}" />
-                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="Ver Torneos" Name="VerTorneos" Click="verTorneosClick"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-            <TabItem Header="Torneos">
-                <DataGrid x:Name="tournamentGrid" AutoGenerateColumns="False" IsReadOnly="true">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding TournamentId}" />
-                        <DataGridTextColumn Header="Nombre" Binding="{Binding Name}" />
-                        <DataGridTextColumn Header="Start" Binding="{Binding StartDate}" />
-                        <DataGridTextColumn Header="End" Binding="{Binding EndDate}" />
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="Ver Cuadro" Name="VerCuadro" Click="VerCuadrosClick"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-        </TabControl>
+                        <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,0">
+                            <Button Name="VerParticipantes" Background="#DCE9FF" BorderBrush="#0C0000" Click="VerParticipantes_Click">
+                                <TextBlock Text="Ver Participantes" FontFamily="Segoe UI" FontSize="16" VerticalAlignment="Center" Margin="10,6" />
+                            </Button>
+                            <Button Name="AñadirParticipante" Margin="0,10" Background="#DCE9FF" BorderBrush="#0C0000" Click="AñadirParticipante_Click">
+                                <TextBlock Text="Añadir Participante" FontFamily="Segoe UI" FontSize="16" VerticalAlignment="Center" Margin="10,6" />
+                            </Button>
+                        </StackPanel>
 
-    </Grid>
+                        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20">
+                            <Button Name="VerTorneos" Background="#87EF8E" BorderBrush="#0C0000" Click="VerTorneos_Click" Width="178">
+                                <TextBlock Text="Ver Torneos" FontFamily="Segoe UI" FontSize="16" VerticalAlignment="Center" Margin="10,6" />
+                            </Button>
+                            <Button Name="AñadirTorneo" Margin="0,10" Background="#87EF8E" BorderBrush="#0C0000" Click="AñadirTorneo_Click">
+                                <TextBlock Text="Añadir Torneo" FontFamily="Segoe UI" FontSize="16" VerticalAlignment="Center" Margin="10,6" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Participantes">
+                    <DataGrid x:Name="teamsGrid" AutoGenerateColumns="False" IsReadOnly="true" Background="#DCE9FF" RowBackground="#A6F3B2">
+                        <DataGrid.Columns >
+                            <DataGridTextColumn Header="ID" Binding="{Binding TeamId}" />
+                            <DataGridTextColumn Header="Nombre" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="VerTorneos" Click="verTorneosClick" Background="#FFF0F0F0" BorderBrush="#0C0000">
+                                            <TextBlock Text="Ver torneos" FontFamily="Segoe UI" FontSize="14" VerticalAlignment="Center" Margin="6" />
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="BorrarParticipante" Click="BorrarParticipante_Click" Background="#FFF0F0F0" BorderBrush="#0C0000">
+                                            <TextBlock Text="Borrar participante" FontFamily="Segoe UI" FontSize="14" VerticalAlignment="Center" Margin="6" />
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Torneos">
+                    <DataGrid x:Name="tournamentGrid" AutoGenerateColumns="False" IsReadOnly="true" Background="#87EF8E" RowBackground="#7499B9">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding TournamentId}" />
+                            <DataGridTextColumn Header="Nombre" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Start" Binding="{Binding StartDate}" />
+                            <DataGridTextColumn Header="End" Binding="{Binding EndDate}" />
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="VerCuadro" Click="VerCuadrosClick" Background="#FFF0F0F0" BorderBrush="#0C0000">
+                                            <TextBlock Text="Ver Cuadro" FontFamily="Segoe UI" FontSize="14" VerticalAlignment="Center" Margin="6" />
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Border>
 </Window>

@@ -43,3 +43,11 @@ C:\Users\viccl\source\repos\TFG\bin\Debug\net6.0-windows\MahApps.Metro.dll
 C:\Users\viccl\source\repos\TFG\bin\Debug\net6.0-windows\Microsoft.Xaml.Behaviors.dll
 C:\Users\viccl\source\repos\TFG\bin\Debug\net6.0-windows\de\MahApps.Metro.resources.dll
 C:\Users\viccl\source\repos\TFG\obj\Debug\net6.0-windows\TournamentWindow.baml
+C:\Users\viccl\source\repos\TFG\bin\Debug\net6.0-windows\FontAwesome.Sharp.dll
+C:\Users\viccl\source\repos\TFG\bin\Debug\net6.0-windows\FontAwesome.WPF.dll
+C:\Users\viccl\source\repos\TFG\obj\Debug\net6.0-windows\AddTeamWindow.g.cs
+C:\Users\viccl\source\repos\TFG\obj\Debug\net6.0-windows\AddTeamWindow.baml
+C:\Users\viccl\source\repos\TFG\obj\Debug\net6.0-windows\AddTournamentWindow.baml
+C:\Users\viccl\source\repos\TFG\obj\Debug\net6.0-windows\AddTournamentWindow.g.cs
+C:\Users\viccl\source\repos\TFG\obj\Debug\net6.0-windows\UpdateWindow.baml
+C:\Users\viccl\source\repos\TFG\obj\Debug\net6.0-windows\UpdateWindow.g.cs
