@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\viccl\source\repos\TFG\App.xaml
-2-231680177
+5-1663633228
 
-11-960162320
-205-1235756213
-MainWindow.xaml;TournamentWindow.xaml;
+151342696892
+216-970332014
+AddTeamWindow.xaml;AddTournamentWindow.xaml;MainWindow.xaml;TournamentWindow.xaml;UpdateWindow.xaml;
 
 False
 

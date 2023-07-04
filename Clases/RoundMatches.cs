@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TFG.Clases
 {
@@ -22,6 +18,10 @@ namespace TFG.Clases
         public int? HomeTeamScore { get; set; }
         public int? AwayTeamScore { get; set; }
 
+        public Team HomeTeam { get; set; }
+
+        public Team VistorTeam { get; set; }    
+
         public RoundMatches(int roundMatchId, int roundId, int? homeTeamId, int? awayTeamId, int? homeTeamScore, int? awayTeamScore)
         {
             RoundMatchId = roundMatchId;
@@ -32,6 +32,18 @@ namespace TFG.Clases
             AwayTeamScore = awayTeamScore;
         }
 
-        
+        public RoundMatches(int roundMatchid,int? homeTeamScore, int? awayTeamScore, int? homeTeamId, int? awayTeamId)
+        {
+            RoundMatchId = roundMatchid;
+            RoundId= 0;
+            HomeTeamScore = homeTeamScore;
+            AwayTeamScore = awayTeamScore;
+            HomeTeamId = homeTeamId;
+            AwayTeamId = awayTeamId;
+        }
+
+        public RoundMatches()
+        {
+        }
     }
 }

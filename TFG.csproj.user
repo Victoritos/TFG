@@ -2,12 +2,30 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
+    <Compile Update="AddTeamWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="AddTournamentWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="TournamentWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UpdateWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="AddTeamWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="AddTournamentWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="TournamentWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UpdateWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
